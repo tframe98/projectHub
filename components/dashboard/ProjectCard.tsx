@@ -39,7 +39,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex-1 min-w-0">
           <div className="flex items-center space-x-2 mb-2">
-            <h3 className="font-semibold text-accent text-sm lg:text-base truncate">{project.name}</h3>
+            <h3 className="font-semibold text-sm lg:text-base truncate">{project.name}</h3>
             <div className={`w-2 h-2 rounded-full flex-shrink-0 ${getStatusColor(project.status)}`} />
           </div>
           

@@ -45,7 +45,7 @@ export default function RecentTasks() {
   return (
     <div className="bg-surface border border-border rounded-lg p-4 lg:p-6">
       <div className="flex items-center justify-between mb-4 lg:mb-6">
-        <h2 className="text-base lg:text-lg font-semibold text-accent">Recent Tasks</h2>
+        <h2 className="text-base lg:text-lg font-semibold">Recent Tasks</h2>
         <button className="text-sm text-primary hover:text-primary/80">
           View All
         </button>
@@ -61,7 +61,7 @@ export default function RecentTasks() {
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-medium text-accent truncate">
+                  <h3 className="text-sm font-medium truncate">
                     {task.title}
                   </h3>
                   <p className="text-xs text-muted mt-1 line-clamp-2">

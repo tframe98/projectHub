@@ -1,28 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #1B1C17;
-  --color-surface: #2B2D26;
-  --color-primary: #D4A373;
-  --color-accent: #F6F1EB;
-  --color-muted: #44443D;
-  --color-border: #44443D;
-  --color-foreground: #F6F1EB;
-  --color-card: #2B2D26;
-  --color-card-foreground: #F6F1EB;
-  --color-popover: #2B2D26;
-  --color-popover-foreground: #F6F1EB;
-  --color-primary-foreground: #1B1C17;
-  --color-secondary: #44443D;
-  --color-secondary-foreground: #F6F1EB;
+  --color-background: #0C1317;
+  --color-surface: #0C1317;
+  --color-primary: #F86624;
+  --color-accent: #F0F4EF;
+  --color-muted: #BFCC94;
+  --color-border: #BFCC94;
+  --color-foreground: #F0F4EF;
+  --color-card: #0C1317;
+  --color-card-foreground: #F0F4EF;
+  --color-popover: #0C1317;
+  --color-popover-foreground: #F0F4EF;
+  --color-primary-foreground: #0C1317;
+  --color-secondary: #BFCC94;
+  --color-secondary-foreground: #0C1317;
   --color-destructive: #ef4444;
-  --color-destructive-foreground: #F6F1EB;
-  --color-input: #44443D;
-  --color-ring: #D4A373;
+  --color-destructive-foreground: #F0F4EF;
+  --color-input: #0C1317;
+  --color-ring: #F86624;
 }
 
 body {
   @apply bg-background text-accent font-sans;
+}
+
+/* Make all text white by default */
+* {
+  color: #F0F4EF;
+}
+
+/* Override for specific elements that need different colors */
+.text-muted {
+  color: #BFCC94 !important;
+}
+
+.text-primary {
+  color: #F86624 !important;
+}
+
+.text-primary-foreground {
+  color: #0C1317 !important;
 }
 
 .line-clamp-2 {

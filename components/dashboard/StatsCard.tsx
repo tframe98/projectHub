@@ -16,7 +16,7 @@ export default function StatsCard({ title, value, icon: Icon, color, bgColor }: 
       <div className="flex items-center justify-between">
         <div className="flex-1 min-w-0">
           <p className="text-xs lg:text-sm font-medium text-muted truncate">{title}</p>
-          <p className="text-lg lg:text-2xl font-bold text-accent mt-1">{value}</p>
+          <p className="text-lg lg:text-2xl font-bold mt-1">{value}</p>
         </div>
         <div className={`p-2 lg:p-3 rounded-lg ${bgColor} flex-shrink-0`}>
           <Icon className={`${color}`} size={20} />
