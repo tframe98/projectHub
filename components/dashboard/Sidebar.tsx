@@ -5,6 +5,7 @@ import {
   LayoutDashboard, 
   Trello, 
   BarChart3, 
+  Calendar,
   Plus, 
   Menu,
   X,
@@ -28,6 +29,7 @@ export default function Sidebar() {
     { name: 'Dashboard', icon: LayoutDashboard, view: 'dashboard' as const },
     { name: 'Kanban Board', icon: Trello, view: 'kanban' as const },
     { name: 'Analytics', icon: BarChart3, view: 'analytics' as const },
+    { name: 'Calendar', icon: Calendar, view: 'calendar' as const },
   ];
 
   return (
@@ -117,7 +119,14 @@ export default function Sidebar() {
           {/* Bottom Section */}
           <div className="p-4 border-t border-border">
             <div className="space-y-2">
-              <button className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm text-muted hover:text-accent hover:bg-muted">
+              <button 
+                onClick={() => setView('team')}
+                className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors ${
+                  view === 'team' 
+                    ? 'bg-primary text-primary-foreground' 
+                    : 'text-muted hover:text-accent hover:bg-muted'
+                }`}
+              >
                 <Users size={18} />
                 <span>Team</span>
               </button>

@@ -6,6 +6,8 @@ import Header from './Header';
 import Dashboard from './Dashboard';
 import KanbanBoard from '../kanban/KanbanBoard';
 import Analytics from '../analytics/Analytics';
+import Calendar from '../calendar/Calendar';
+import Team from '../team/Team';
 
 export default function DashboardLayout() {
   const { view, sidebarOpen, toggleSidebar } = useProjectStore();
@@ -18,6 +20,10 @@ export default function DashboardLayout() {
         return <KanbanBoard />;
       case 'analytics':
         return <Analytics />;
+      case 'calendar':
+        return <Calendar />;
+      case 'team':
+        return <Team />;
       default:
         return <Dashboard />;
     }

@@ -56,3 +56,28 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Calendar list view text colors */
+.calendar-list-text {
+  color: #0f172a !important;
+}
+
+.calendar-list-text h4 {
+  color: #0f172a !important;
+}
+
+.calendar-list-text p {
+  color: #334155 !important;
+}
+
+.calendar-list-text span {
+  color: #0f172a !important;
+}
+
+.calendar-list-text svg {
+  color: #0f172a !important;
+}
+
+.calendar-list-text * {
+  color: #0f172a !important;
+}

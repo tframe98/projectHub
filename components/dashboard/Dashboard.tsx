@@ -18,11 +18,15 @@ import StatsCard from './StatsCard';
 import Modal from '../ui/Modal';
 import ProjectForm from '../ui/ProjectForm';
 import TaskForm from '../ui/TaskForm';
+import TeamForm from '../ui/TeamForm';
+import ScheduleForm from '../ui/ScheduleForm';
 
 export default function Dashboard() {
   const { projects, currentProject, setCurrentProject, setView } = useProjectStore();
   const [showProjectModal, setShowProjectModal] = useState(false);
   const [showTaskModal, setShowTaskModal] = useState(false);
+  const [showTeamModal, setShowTeamModal] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
 
   // Calculate overall stats
   const totalProjects = projects.length;
@@ -86,12 +90,10 @@ export default function Dashboard() {
         setShowTaskModal(true);
         break;
       case 'team':
-        // TODO: Implement team management
-        console.log('Team management coming soon');
+        setShowTeamModal(true);
         break;
       case 'schedule':
-        // TODO: Implement scheduling
-        console.log('Scheduling coming soon');
+        setShowScheduleModal(true);
         break;
     }
   };
@@ -219,6 +221,30 @@ export default function Dashboard() {
       >
         <TaskForm 
           onClose={() => setShowTaskModal(false)} 
+          projectId={currentProject?.id}
+        />
+      </Modal>
+
+      {/* Team Modal */}
+      <Modal
+        isOpen={showTeamModal}
+        onClose={() => setShowTeamModal(false)}
+        title="Add Team Member"
+      >
+        <TeamForm 
+          onClose={() => setShowTeamModal(false)} 
+          projectId={currentProject?.id}
+        />
+      </Modal>
+
+      {/* Schedule Modal */}
+      <Modal
+        isOpen={showScheduleModal}
+        onClose={() => setShowScheduleModal(false)}
+        title="Schedule Event"
+      >
+        <ScheduleForm 
+          onClose={() => setShowScheduleModal(false)} 
           projectId={currentProject?.id}
         />
       </Modal>

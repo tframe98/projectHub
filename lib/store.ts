@@ -11,6 +11,28 @@ export interface Task {
   createdAt: string;
 }
 
+export interface TeamMember {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'member' | 'viewer';
+  department?: string;
+  addedAt: string;
+}
+
+export interface ScheduleEvent {
+  id: string;
+  title: string;
+  description: string;
+  type: 'meeting' | 'deadline' | 'milestone' | 'review';
+  date: string;
+  time: string;
+  duration: number;
+  attendees: string[];
+  location?: string;
+  createdAt: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -19,6 +41,8 @@ export interface Project {
   progress: number;
   tasks: Task[];
   columns: Column[];
+  teamMembers: TeamMember[];
+  scheduleEvents: ScheduleEvent[];
   updatedAt: string;
 }
 
@@ -32,17 +56,17 @@ export interface Column {
 interface ProjectStore {
   projects: Project[];
   currentProject: Project | null;
-  view: 'dashboard' | 'kanban' | 'analytics';
+  view: 'dashboard' | 'kanban' | 'analytics' | 'calendar' | 'team';
   sidebarOpen: boolean;
   
   // Actions
   setProjects: (projects: Project[]) => void;
   setCurrentProject: (project: Project | null) => void;
-  setView: (view: 'dashboard' | 'kanban' | 'analytics') => void;
+  setView: (view: 'dashboard' | 'kanban' | 'analytics' | 'calendar' | 'team') => void;
   toggleSidebar: () => void;
   
   // Project actions
-  addProject: (project: Omit<Project, 'id' | 'updatedAt' | 'columns'>) => void;
+  addProject: (project: Omit<Project, 'id' | 'updatedAt' | 'columns' | 'teamMembers' | 'scheduleEvents'>) => void;
   updateProject: (id: string, updates: Partial<Project>) => void;
   deleteProject: (id: string) => void;
   
@@ -57,6 +81,16 @@ interface ProjectStore {
   updateColumn: (projectId: string, columnId: string, updates: Partial<Column>) => void;
   deleteColumn: (projectId: string, columnId: string) => void;
   reorderColumns: (projectId: string, columnIds: string[]) => void;
+  
+  // Team actions
+  addTeamMember: (projectId: string, member: Omit<TeamMember, 'id' | 'addedAt'>) => void;
+  updateTeamMember: (projectId: string, memberId: string, updates: Partial<TeamMember>) => void;
+  deleteTeamMember: (projectId: string, memberId: string) => void;
+  
+  // Schedule actions
+  addScheduleEvent: (projectId: string, event: Omit<ScheduleEvent, 'id' | 'createdAt'>) => void;
+  updateScheduleEvent: (projectId: string, eventId: string, updates: Partial<ScheduleEvent>) => void;
+  deleteScheduleEvent: (projectId: string, eventId: string) => void;
 }
 
 // Default columns for new projects
@@ -76,6 +110,49 @@ const sampleProjects: Project[] = [
     status: 'active',
     progress: 65,
     columns: [...defaultColumns],
+    teamMembers: [
+      {
+        id: '1',
+        name: 'Emma Davis',
+        email: 'emma.davis@company.com',
+        role: 'admin',
+        department: 'Design',
+        addedAt: '2024-01-15',
+      },
+      {
+        id: '2',
+        name: 'Alex Rodriguez',
+        email: 'alex.rodriguez@company.com',
+        role: 'member',
+        department: 'Development',
+        addedAt: '2024-01-16',
+      },
+    ],
+    scheduleEvents: [
+      {
+        id: '1',
+        title: 'Design Review Meeting',
+        description: 'Review the homepage design with stakeholders',
+        type: 'meeting',
+        date: '2024-01-25',
+        time: '14:00',
+        duration: 60,
+        attendees: ['emma.davis@company.com', 'alex.rodriguez@company.com'],
+        location: 'Conference Room A',
+        createdAt: '2024-01-20',
+      },
+      {
+        id: '2',
+        title: 'Content Deadline',
+        description: 'Final content submission deadline',
+        type: 'deadline',
+        date: '2024-01-30',
+        time: '17:00',
+        duration: 0,
+        attendees: ['rachel.green@company.com'],
+        createdAt: '2024-01-21',
+      },
+    ],
     tasks: [
       {
         id: '1',
@@ -117,6 +194,30 @@ const sampleProjects: Project[] = [
     status: 'active',
     progress: 35,
     columns: [...defaultColumns],
+    teamMembers: [
+      {
+        id: '3',
+        name: 'David Kim',
+        email: 'david.kim@company.com',
+        role: 'admin',
+        department: 'Development',
+        addedAt: '2024-01-18',
+      },
+    ],
+    scheduleEvents: [
+      {
+        id: '3',
+        title: 'App Architecture Review',
+        description: 'Review the mobile app architecture with the development team',
+        type: 'meeting',
+        date: '2024-01-28',
+        time: '10:00',
+        duration: 90,
+        attendees: ['david.kim@company.com', 'emma.davis@company.com'],
+        location: 'Zoom',
+        createdAt: '2024-01-22',
+      },
+    ],
     tasks: [
       {
         id: '4',
@@ -148,6 +249,30 @@ const sampleProjects: Project[] = [
     status: 'on-hold',
     progress: 20,
     columns: [...defaultColumns],
+    teamMembers: [
+      {
+        id: '4',
+        name: 'Rachel Green',
+        email: 'rachel.green@company.com',
+        role: 'member',
+        department: 'Marketing',
+        addedAt: '2024-01-20',
+      },
+    ],
+    scheduleEvents: [
+      {
+        id: '4',
+        title: 'Campaign Strategy Review',
+        description: 'Review marketing campaign strategy and timeline',
+        type: 'review',
+        date: '2024-02-05',
+        time: '15:00',
+        duration: 60,
+        attendees: ['rachel.green@company.com', 'david.kim@company.com'],
+        location: 'Conference Room B',
+        createdAt: '2024-01-23',
+      },
+    ],
     tasks: [
       {
         id: '6',
@@ -190,6 +315,8 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
       ...projectData,
       id: Date.now().toString(),
       columns: [...defaultColumns],
+      teamMembers: [],
+      scheduleEvents: [],
       updatedAt: new Date().toISOString(),
     };
     set((state) => ({ projects: [...state.projects, newProject] }));
@@ -364,6 +491,106 @@ export const useProjectStore = create<ProjectStore>((set, get) => ({
                 const column = project.columns.find(c => c.id === columnId);
                 return column ? { ...column, order: index } : column;
               }).filter(Boolean) as Column[],
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      ),
+    }));
+  },
+
+  addTeamMember: (projectId, memberData) => {
+    const newMember: TeamMember = {
+      ...memberData,
+      id: Date.now().toString(),
+      addedAt: new Date().toISOString(),
+    };
+    
+    set((state) => ({
+      projects: state.projects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              teamMembers: [...project.teamMembers, newMember],
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      ),
+    }));
+  },
+
+  updateTeamMember: (projectId, memberId, updates) => {
+    set((state) => ({
+      projects: state.projects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              teamMembers: project.teamMembers.map((member) =>
+                member.id === memberId ? { ...member, ...updates } : member
+              ),
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      ),
+    }));
+  },
+
+  deleteTeamMember: (projectId, memberId) => {
+    set((state) => ({
+      projects: state.projects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              teamMembers: project.teamMembers.filter((member) => member.id !== memberId),
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      ),
+    }));
+  },
+
+  addScheduleEvent: (projectId, eventData) => {
+    const newEvent: ScheduleEvent = {
+      ...eventData,
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+    };
+    
+    set((state) => ({
+      projects: state.projects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              scheduleEvents: [...project.scheduleEvents, newEvent],
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      ),
+    }));
+  },
+
+  updateScheduleEvent: (projectId, eventId, updates) => {
+    set((state) => ({
+      projects: state.projects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              scheduleEvents: project.scheduleEvents.map((event) =>
+                event.id === eventId ? { ...event, ...updates } : event
+              ),
+              updatedAt: new Date().toISOString(),
+            }
+          : project
+      ),
+    }));
+  },
+
+  deleteScheduleEvent: (projectId, eventId) => {
+    set((state) => ({
+      projects: state.projects.map((project) =>
+        project.id === projectId
+          ? {
+              ...project,
+              scheduleEvents: project.scheduleEvents.filter((event) => event.id !== eventId),
               updatedAt: new Date().toISOString(),
             }
           : project
