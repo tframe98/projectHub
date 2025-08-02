@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { useProjectStore } from '@/lib/store';
 import { 
   LayoutDashboard, 
@@ -13,8 +14,11 @@ import {
   Users,
   Settings
 } from 'lucide-react';
+import Modal from '@/components/ui/Modal';
+import ProjectForm from '@/components/ui/ProjectForm';
 
 export default function Sidebar() {
+  const [showProjectModal, setShowProjectModal] = useState(false);
   const { 
     sidebarOpen, 
     toggleSidebar, 
@@ -80,7 +84,10 @@ export default function Sidebar() {
             <div className="mt-6 lg:mt-8">
               <div className="flex items-center justify-between mb-3 lg:mb-4">
                 <h3 className="text-sm font-semibold text-accent">Projects</h3>
-                <button className="p-1 rounded-md hover:bg-muted">
+                <button 
+                  onClick={() => setShowProjectModal(true)}
+                  className="p-1 rounded-md hover:bg-muted"
+                >
                   <Plus size={16} className="text-muted" />
                 </button>
               </div>
@@ -138,6 +145,15 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
+
+      {/* Project Creation Modal */}
+      <Modal
+        isOpen={showProjectModal}
+        onClose={() => setShowProjectModal(false)}
+        title="Create New Project"
+      >
+        <ProjectForm onClose={() => setShowProjectModal(false)} />
+      </Modal>
     </>
   );
 } 
