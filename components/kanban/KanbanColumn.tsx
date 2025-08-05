@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Plus, MoreVertical, GripVertical, Edit2, X } from 'lucide-react';
+import { MoreVertical, GripVertical, Edit2, X } from 'lucide-react';
 import KanbanTask from './KanbanTask';
 import { useProjectStore } from '@/lib/store';
 

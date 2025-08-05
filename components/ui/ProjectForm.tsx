@@ -9,10 +9,14 @@ interface ProjectFormProps {
 
 export default function ProjectForm({ onClose }: ProjectFormProps) {
   const { addProject } = useProjectStore();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    status: 'active' | 'completed' | 'on-hold';
+  }>({
     name: '',
     description: '',
-    status: 'active' as const,
+    status: 'active',
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -68,7 +72,7 @@ export default function ProjectForm({ onClose }: ProjectFormProps) {
         <select
           id="status"
           value={formData.status}
-          onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+          onChange={(e) => setFormData({ ...formData, status: e.target.value as 'active' | 'completed' | 'on-hold' })}
           className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
         >
           <option value="active">Active</option>

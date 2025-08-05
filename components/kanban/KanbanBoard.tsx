@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useProjectStore } from '@/lib/store';
-import { Plus, MoreVertical } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import KanbanColumn from './KanbanColumn';
 import Modal from '../ui/Modal';
 import ColumnForm from '../ui/ColumnForm';
@@ -63,14 +63,14 @@ export default function KanbanBoard() {
     setDraggedColumn(null);
   };
 
-  const handleColumnDrop = (draggedColumnId: string) => {
+  const _handleColumnDrop = (draggedColumnId: string) => {
     console.log('Column drop:', draggedColumnId);
     if (draggedColumnId && currentProject) {
       // Get the current column order
       const currentOrder = columns.map(col => col.id);
       
       // Find the index of the dropped column
-      const droppedIndex = currentOrder.indexOf(draggedColumnId);
+      const _droppedIndex = currentOrder.indexOf(draggedColumnId);
       
       // Remove the dragged column from its current position
       const newOrder = currentOrder.filter(id => id !== draggedColumnId);
@@ -91,7 +91,7 @@ export default function KanbanBoard() {
       const currentOrder = columns.map(col => col.id);
       
       // Find the indices
-      const draggedIndex = currentOrder.indexOf(draggedColumnId);
+      const _draggedIndex = currentOrder.indexOf(draggedColumnId);
       const targetIndex = currentOrder.indexOf(targetColumnId);
       
       // Remove the dragged column

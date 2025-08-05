@@ -6,7 +6,7 @@ import { useProjectStore } from '@/lib/store';
 interface TeamFormProps {
   onClose: () => void;
   projectId?: string;
-  editingMember?: any;
+  editingMember?: { id: string; name: string; email: string; role: string; department?: string; projectId: string } | null;
 }
 
 export default function TeamForm({ onClose, projectId, editingMember }: TeamFormProps) {

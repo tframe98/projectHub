@@ -7,9 +7,9 @@ import Modal from '../ui/Modal';
 import TeamForm from '../ui/TeamForm';
 
 export default function Team() {
-  const { projects, addTeamMember, updateTeamMember, deleteTeamMember } = useProjectStore();
+  const { projects, addTeamMember, deleteTeamMember } = useProjectStore();
   const [showAddModal, setShowAddModal] = useState(false);
-  const [editingMember, setEditingMember] = useState<any>(null);
+  const [editingMember, setEditingMember] = useState<{ id: string; name: string; email: string; role: string; department?: string; projectId: string; projectName: string } | null>(null);
   const [selectedProject, setSelectedProject] = useState<string>('all');
 
   // Get all team members from all projects
@@ -26,7 +26,7 @@ export default function Team() {
     ? allTeamMembers 
     : allTeamMembers.filter(member => member.projectId === selectedProject);
 
-  const getRoleIcon = (role: string) => {
+  const _getRoleIcon = (role: string) => {
     switch (role) {
       case 'admin':
         return <Crown size={16} className="text-yellow-500" />;
@@ -52,7 +52,7 @@ export default function Team() {
     }
   };
 
-  const handleEditMember = (member: any) => {
+  const handleEditMember = (member: { id: string; name: string; email: string; role: string; department?: string; projectId: string; projectName: string }) => {
     setEditingMember(member);
     setShowAddModal(true);
   };
@@ -63,7 +63,7 @@ export default function Team() {
     }
   };
 
-  const handleAddMember = (memberData: any) => {
+  const handleAddMember = (memberData: { name: string; email: string; role: 'admin' | 'member' | 'viewer'; department?: string }) => {
     const projectId = selectedProject === 'all' ? projects[0]?.id || 'general' : selectedProject;
     addTeamMember(projectId, memberData);
     setShowAddModal(false);

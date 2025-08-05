@@ -67,7 +67,7 @@ export default function Calendar() {
     return eventDate < today && event.status !== 'done';
   });
 
-  const getEventIcon = (event: any, viewType?: string) => {
+  const getEventIcon = (event: { type: string; status?: string }, viewType?: string) => {
     if (event.type === 'task') {
       switch (event.status) {
         case 'done':
@@ -93,7 +93,7 @@ export default function Calendar() {
     }
   };
 
-  const getEventColor = (event: any) => {
+  const getEventColor = (event: { type: string; status?: string }) => {
     if (event.type === 'task') {
       switch (event.status) {
         case 'done':
@@ -349,7 +349,7 @@ export default function Calendar() {
                              <Clock size={12} />
                              <span>{formatTime(new Date(event.date))}</span>
                            </span>
-                           {event.location && (
+                           {'location' in event && event.location && (
                              <span className="flex items-center space-x-1">
                                <MapPin size={12} />
                                <span>{event.location}</span>
@@ -397,7 +397,7 @@ export default function Calendar() {
                              <Clock size={12} />
                              <span>{formatTime(new Date(event.date))}</span>
                            </span>
-                           {event.location && (
+                           {'location' in event && event.location && (
                              <span className="flex items-center space-x-1">
                                <MapPin size={12} />
                                <span>{event.location}</span>

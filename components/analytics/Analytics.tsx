@@ -9,7 +9,7 @@ export default function Analytics() {
   // Calculate analytics data
   const totalProjects = projects.length;
   const activeProjects = projects.filter(p => p.status === 'active').length;
-  const completedProjects = projects.filter(p => p.status === 'completed').length;
+  const _completedProjects = projects.filter(p => p.status === 'completed').length;
   const totalTasks = projects.reduce((sum, p) => sum + p.tasks.length, 0);
   const completedTasks = projects.reduce((sum, p) => 
     sum + p.tasks.filter(t => t.status === 'done').length, 0
@@ -189,22 +189,22 @@ export default function Analytics() {
       <div className="bg-surface border border-border rounded-lg p-6">
         <h2 className="text-lg font-semibold mb-4">Recent Activity</h2>
         <div className="space-y-4">
-          {projects.slice(0, 5).map((project, index) => (
-            <div key={project.id} className="flex items-center space-x-4">
-              <div className="w-2 h-2 bg-primary rounded-full"></div>
-              <div className="flex-1">
-                <p className="text-sm font-medium">
-                  Project "{project.name}" was updated
-                </p>
-                <p className="text-xs text-muted">
-                  {new Date(project.updatedAt).toLocaleDateString()}
-                </p>
+                      {projects.slice(0, 5).map((project) => (
+              <div key={project.id} className="flex items-center space-x-4">
+                <div className="w-2 h-2 bg-primary rounded-full"></div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium">
+                    Project &quot;{project.name}&quot; was updated
+                  </p>
+                  <p className="text-xs text-muted">
+                    {new Date(project.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
+                <span className="text-xs text-muted">
+                  {project.progress}% complete
+                </span>
               </div>
-              <span className="text-xs text-muted">
-                {project.progress}% complete
-              </span>
-            </div>
-          ))}
+            ))}
         </div>
       </div>
     </div>

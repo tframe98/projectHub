@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useProjectStore } from '@/lib/store';
+import { useProjectStore, Project } from '@/lib/store';
 import { 
   TrendingUp, 
   CheckCircle, 
@@ -76,7 +76,7 @@ export default function Dashboard() {
 
   const displayProjects = currentProject ? [currentProject] : projects;
 
-  const handleProjectClick = (project: any) => {
+  const handleProjectClick = (project: Project) => {
     setCurrentProject(project);
     setView('kanban');
   };

@@ -8,19 +8,34 @@ interface TaskFormProps {
   projectId?: string;
 }
 
+type TaskFormData = {
+  title: string;
+  description: string;
+  status: 'todo' | 'in-progress' | 'review' | 'done';
+  priority: 'low' | 'medium' | 'high';
+  assignee: string;
+  dueDate: string;
+};
+
+const availableStatuses = [
+  { value: 'todo', label: 'To Do' },
+  { value: 'in-progress', label: 'In Progress' },
+  { value: 'review', label: 'Review' },
+  { value: 'done', label: 'Done' },
+];
+
 export default function TaskForm({ onClose, projectId }: TaskFormProps) {
   const { projects, addTask } = useProjectStore();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<TaskFormData>({
     title: '',
     description: '',
     status: 'todo',
-    priority: 'medium' as const,
+    priority: 'medium',
     assignee: '',
     dueDate: '',
-    projectId: projectId || '',
   });
 
-  const selectedProject = projects.find(p => p.id === formData.projectId);
+  const selectedProject = projects.find(p => p.id === projectId);
   const availableStatuses = selectedProject?.columns.map(col => ({
     value: col.id,
     label: col.title
@@ -33,14 +48,14 @@ export default function TaskForm({ onClose, projectId }: TaskFormProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.title.trim() || !formData.projectId) return;
+    if (!formData.title.trim() || !projectId) return;
 
-    addTask(formData.projectId, {
+    addTask(projectId, {
       title: formData.title.trim(),
       description: formData.description.trim(),
       status: formData.status,
       priority: formData.priority,
-      assignee: formData.assignee.trim(),
+      assignee: formData.assignee,
       dueDate: formData.dueDate,
     });
 
@@ -49,28 +64,6 @@ export default function TaskForm({ onClose, projectId }: TaskFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      {!projectId && (
-        <div>
-          <label htmlFor="projectId" className="block text-sm font-medium mb-2">
-            Project
-          </label>
-          <select
-            id="projectId"
-            value={formData.projectId}
-            onChange={(e) => setFormData({ ...formData, projectId: e.target.value, status: 'todo' })}
-            className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            required
-          >
-            <option value="">Select a project</option>
-            {projects.map((project) => (
-              <option key={project.id} value={project.id}>
-                {project.name}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-
       <div>
         <label htmlFor="title" className="block text-sm font-medium mb-2">
           Task Title
@@ -108,7 +101,7 @@ export default function TaskForm({ onClose, projectId }: TaskFormProps) {
           <select
             id="status"
             value={formData.status}
-            onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+            onChange={(e) => setFormData({ ...formData, status: e.target.value as 'todo' | 'in-progress' | 'review' | 'done' })}
             className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             {availableStatuses.map((status) => (
@@ -126,7 +119,7 @@ export default function TaskForm({ onClose, projectId }: TaskFormProps) {
           <select
             id="priority"
             value={formData.priority}
-            onChange={(e) => setFormData({ ...formData, priority: e.target.value as any })}
+            onChange={(e) => setFormData({ ...formData, priority: e.target.value as 'low' | 'medium' | 'high' })}
             className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
           >
             <option value="low">Low</option>
